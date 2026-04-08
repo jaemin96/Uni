@@ -1,8 +1,0 @@
-{
-  "extends": "@mono/ts-config/nestjs.json",
-  "compilerOptions": {
-    "baseUrl": "."
-  },
-  "include": ["src/**/*.ts"]
-}
-
