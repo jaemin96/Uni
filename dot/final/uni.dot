@@ -1,0 +1,73 @@
+
+digraph {
+    compound="true"
+    newrank="true"
+
+    // ===== GLOBAL GRAPH STYLE =====
+    graph [
+        bgcolor="#1e1e1e",
+        fontcolor="white",
+        fontsize=14,
+        rankdir="LR", // 레이아웃 배치 ("LR" OR "TB")
+        pad=1.0
+    ];
+
+    // ===== DEFAULT NODE STYLE =====
+    node [
+        shape="box",
+        style="rounded,filled",
+        fillcolor="#2d2d30",
+        fontcolor="white",
+        color="#555",
+        penwidth=2
+    ];
+
+    // ===== DEFAULT EDGE STYLE =====
+    edge [
+        color="#647b9eb0",
+        penwidth=2,
+        arrowsize=1.2
+    ];
+
+// -------------------------
+// Root 클러스터
+subgraph cluster_root {
+    label="uni";
+    labelloc=t;      
+    labeljust=l; 
+"[root] @uni/eslint-config#build" [fillcolor="#005f9e", fontcolor="white", style="filled,rounded", penwidth=2];
+"[root] @uni/prettier-config#build" [fillcolor="#005f9e", fontcolor="white", style="filled,rounded", penwidth=2];
+"[root] ___ROOT___" [fillcolor="#007acc", fontcolor="white", style="filled,rounded", penwidth=3];
+"[root] @uni/tsconfig#build" [fillcolor="#005f9e", fontcolor="white", style="filled,rounded", penwidth=2];
+"[root] @uni/utils#build" [fillcolor="#005f9e", fontcolor="white", style="filled,rounded", penwidth=2];
+"[root] @uni/web#build" [fillcolor="#005f9e", fontcolor="white", style="filled,rounded", penwidth=2];
+
+
+// -------------------------
+// Packages 클러스터
+subgraph cluster_packages {
+    label="Packages";
+
+}
+
+// -------------------------
+// Apps 클러스터
+subgraph cluster_apps {
+    label="Apps";
+
+}
+
+compound = "true"
+	newrank = "true"
+	subgraph "root" {
+		"[root] @uni/eslint-config#build" -> "[root] @uni/prettier-config#build"
+		"[root] @uni/prettier-config#build" -> "[root] ___ROOT___"
+		"[root] @uni/tsconfig#build" -> "[root] ___ROOT___"
+		"[root] @uni/utils#build" -> "[root] ___ROOT___"
+		"[root] @uni/web#build" -> "[root] @uni/eslint-config#build"
+		"[root] @uni/web#build" -> "[root] @uni/prettier-config#build"
+		"[root] @uni/web#build" -> "[root] @uni/tsconfig#build"
+		"[root] @uni/web#build" -> "[root] @uni/utils#build"
+	}
+}
+}

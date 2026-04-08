@@ -4,7 +4,7 @@ const reactPlugin = require("eslint-plugin-react");
 const prettierPlugin = require("eslint-plugin-prettier");
 const eslintConfigPrettier = require("eslint-config-prettier");
 
-const prettierConfig = require("@repo/prettier-config");
+const prettierConfig = require("@uni/prettier-config");
 
 module.exports = [
   eslintConfigPrettier,

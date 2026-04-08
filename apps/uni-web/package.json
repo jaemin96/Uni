@@ -1,0 +1,33 @@
+{
+  "name": "@uni/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "clean": "rm -rf .next dist"
+  },
+  "dependencies": {
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "lucide-react": "^0.511.0",
+    "next": "^15.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.56.3",
+    "zod": "^3.24.4",
+    "@hookform/resolvers": "^5.0.1",
+    "@uni/utils": "workspace:*",
+    "jose": "^5.10.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.2",
+    "@uni/eslint-config": "workspace:*",
+    "@uni/prettier-config": "workspace:*",
+    "@uni/tsconfig": "workspace:*"
+  }
+}
