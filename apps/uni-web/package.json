@@ -28,6 +28,8 @@
     "@types/react-dom": "^19.1.2",
     "@uni/eslint-config": "workspace:*",
     "@uni/prettier-config": "workspace:*",
-    "@uni/tsconfig": "workspace:*"
+    "@uni/tsconfig": "workspace:*",
+    "tailwindcss": "^4.1.4",
+    "@tailwindcss/postcss": "^4.1.4"
   }
 }
