@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyRefreshToken, signAccessToken, signRefreshToken } from "@/lib/auth/token";
 import { REFRESH_COOKIE_NAME, getRefreshCookieOptions } from "@/lib/auth/cookies";
 
-// TODO: Replace with real DB lookup
 async function findUserById(id: string) {
   if (id === "usr_01") {
-    return { id, email: "admin@uni.dev", role: "admin" };
+    return { id, email: "dev@test.com", role: "user" };
   }
   return null;
 }
@@ -35,7 +34,7 @@ export async function POST(req: NextRequest) {
 
   const response = NextResponse.json({
     accessToken,
-    expiresIn: 15 * 60,
+    expiresIn: 10 * 60,
   });
 
   response.cookies.set(REFRESH_COOKIE_NAME, newRefreshToken, getRefreshCookieOptions());

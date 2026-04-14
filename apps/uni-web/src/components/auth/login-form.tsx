@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -21,8 +20,6 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
   const { login } = useAuth();
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [serverError, setServerError] = useState<string | null>(null);
 
   const {
@@ -31,6 +28,11 @@ export function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
+    // Auto-fill dev credentials per spec
+    defaultValues: {
+      email: "dev@test.com",
+      password: "qwer1234",
+    },
   });
 
   const onSubmit = async (values: LoginFormValues) => {
@@ -50,10 +52,12 @@ export function LoginForm() {
       }
 
       const data = await res.json();
-      login({ accessToken: data.accessToken, expiresIn: data.expiresIn, user: data.user });
-
-      const from = searchParams.get("from") ?? "/dashboard";
-      router.replace(from);
+      login({
+        accessToken: data.accessToken,
+        expiresIn: data.expiresIn,
+        user: data.user,
+        refreshIssuedAt: new Date(),
+      });
     } catch {
       setServerError("네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
     }
@@ -66,7 +70,6 @@ export function LoginForm() {
         <Input
           id="email"
           type="email"
-          placeholder="name@example.com"
           autoComplete="email"
           aria-invalid={!!errors.email}
           {...register("email")}
@@ -83,7 +86,6 @@ export function LoginForm() {
         <Input
           id="password"
           type="password"
-          placeholder="••••••••"
           autoComplete="current-password"
           aria-invalid={!!errors.password}
           {...register("password")}

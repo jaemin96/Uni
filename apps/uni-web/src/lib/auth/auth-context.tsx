@@ -3,36 +3,42 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import type { AuthUser, AuthTokens } from "./types";
 
+export type TokenMeta = {
+  accessToken: string;
+  accessExpiresAt: Date; // absolute expiry time
+  refreshIssuedAt: Date; // when the refresh token was issued
+};
+
 interface AuthState {
   user: AuthUser | null;
-  accessToken: string | null;
+  tokenMeta: TokenMeta | null;
   isLoading: boolean;
 }
 
 interface AuthContextValue extends AuthState {
-  login: (tokens: AuthTokens & { user: AuthUser }) => void;
+  login: (tokens: AuthTokens & { user: AuthUser; refreshIssuedAt?: Date }) => void;
   logout: () => Promise<void>;
   getAccessToken: () => string | null;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-// Silent refresh interval: 1 minute before token expiry (access token = 15min, so every 14min)
 const SILENT_REFRESH_OFFSET_MS = 60 * 1000;
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<AuthState>({
     user: null,
-    accessToken: null,
+    tokenMeta: null,
     isLoading: true,
   });
 
   const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const accessTokenRef = useRef<string | null>(null);
+  // Track when the current refresh token was issued (approximated from last login/refresh)
+  const refreshIssuedAtRef = useRef<Date>(new Date());
 
   const scheduleRefresh = useCallback((expiresInSeconds: number) => {
     if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
-
     const delay = Math.max(0, expiresInSeconds * 1000 - SILENT_REFRESH_OFFSET_MS);
     refreshTimerRef.current = setTimeout(() => {
       silentRefresh();
@@ -43,21 +49,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const res = await fetch("/api/auth/refresh", { method: "POST", credentials: "include" });
       if (!res.ok) {
-        setState({ user: null, accessToken: null, isLoading: false });
+        setState({ user: null, tokenMeta: null, isLoading: false });
         accessTokenRef.current = null;
         return;
       }
       const data: AuthTokens = await res.json();
+      const now = new Date();
+      refreshIssuedAtRef.current = now;
       accessTokenRef.current = data.accessToken;
-      setState((prev) => ({ ...prev, accessToken: data.accessToken, isLoading: false }));
+      setState((prev) => ({
+        ...prev,
+        tokenMeta: {
+          accessToken: data.accessToken,
+          accessExpiresAt: new Date(now.getTime() + data.expiresIn * 1000),
+          refreshIssuedAt: now,
+        },
+        isLoading: false,
+      }));
       scheduleRefresh(data.expiresIn);
     } catch {
-      setState({ user: null, accessToken: null, isLoading: false });
+      setState({ user: null, tokenMeta: null, isLoading: false });
       accessTokenRef.current = null;
     }
   }, [scheduleRefresh]);
 
-  // On mount, attempt silent refresh to restore session from httpOnly refresh token cookie
   useEffect(() => {
     silentRefresh();
     return () => {
@@ -66,9 +81,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [silentRefresh]);
 
   const login = useCallback(
-    (data: AuthTokens & { user: AuthUser }) => {
+    (data: AuthTokens & { user: AuthUser; refreshIssuedAt?: Date }) => {
+      const now = new Date();
+      const refreshIssuedAt = data.refreshIssuedAt ?? now;
+      refreshIssuedAtRef.current = refreshIssuedAt;
       accessTokenRef.current = data.accessToken;
-      setState({ user: data.user, accessToken: data.accessToken, isLoading: false });
+      setState({
+        user: data.user,
+        tokenMeta: {
+          accessToken: data.accessToken,
+          accessExpiresAt: new Date(now.getTime() + data.expiresIn * 1000),
+          refreshIssuedAt,
+        },
+        isLoading: false,
+      });
       scheduleRefresh(data.expiresIn);
     },
     [scheduleRefresh],
@@ -78,10 +104,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
     await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
     accessTokenRef.current = null;
-    setState({ user: null, accessToken: null, isLoading: false });
+    setState({ user: null, tokenMeta: null, isLoading: false });
   }, []);
 
-  // Expose ref-based getter to avoid stale closures in fetch interceptors
   const getAccessToken = useCallback(() => accessTokenRef.current, []);
 
   return (

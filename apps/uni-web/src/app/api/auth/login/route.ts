@@ -8,11 +8,12 @@ const loginSchema = z.object({
   password: z.string().min(8),
 });
 
-// TODO: Replace with real DB lookup
+// Hardcoded dev credentials — managed separately per spec
+const DEV_CREDENTIALS = { email: "dev@test.com", password: "qwer1234", id: "usr_01", role: "user" };
+
 async function findUserByCredentials(email: string, password: string) {
-  // Mock user for development — swap with real DB query
-  if (email === "admin@uni.dev" && password === "password1234") {
-    return { id: "usr_01", email, role: "admin" };
+  if (email === DEV_CREDENTIALS.email && password === DEV_CREDENTIALS.password) {
+    return { id: DEV_CREDENTIALS.id, email, role: DEV_CREDENTIALS.role };
   }
   return null;
 }
@@ -40,7 +41,7 @@ export async function POST(req: NextRequest) {
 
   const response = NextResponse.json({
     accessToken,
-    expiresIn: 15 * 60, // 15 minutes in seconds
+    expiresIn: 10 * 60, // 10 minutes in seconds
     user: { id: user.id, email: user.email, role: user.role },
   });
 

@@ -8,7 +8,7 @@ const REFRESH_TOKEN_SECRET = new TextEncoder().encode(
   process.env.JWT_REFRESH_SECRET ?? "dev-refresh-secret-change-in-production",
 );
 
-export const ACCESS_TOKEN_EXPIRY = "15m";
+export const ACCESS_TOKEN_EXPIRY = "10m";
 export const REFRESH_TOKEN_EXPIRY = "7d";
 export const REFRESH_COOKIE_NAME = "uni_rt";
 
