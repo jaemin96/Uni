@@ -1,11 +1,6 @@
-import { SideNav } from "@/components/features/nav/side-nav";
+import { AppLayout } from "@/components/layout/Layout";
 import type { ReactNode } from "react";
 
 export default function MainLayout({ children }: { children: ReactNode }) {
-  return (
-    <div className="flex h-screen overflow-hidden">
-      <SideNav />
-      <main className="flex-1 overflow-y-auto p-6">{children}</main>
-    </div>
-  );
+  return <AppLayout>{children}</AppLayout>;
 }
