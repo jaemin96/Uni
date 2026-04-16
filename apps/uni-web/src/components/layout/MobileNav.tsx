@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, LayoutDashboard, LogIn } from "lucide-react";
+import { Menu, LayoutDashboard, LogIn, Component } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavSection } from "@/components/features/nav/nav-section";
 import { NavItem } from "@/components/features/nav/nav-item";
@@ -28,6 +28,9 @@ export function MobileNav() {
             <nav className="flex flex-col gap-6" onClick={() => setOpen(false)}>
               <NavSection title="인증">
                 <NavItem href="/login" label="로그인" icon={LogIn} />
+              </NavSection>
+              <NavSection title="Hooks">
+                <NavItem href="/hooks/useRef" label="useRef" icon={Component} />
               </NavSection>
               <NavSection title="메인">
                 <NavItem href="/dashboard" label="대시보드" icon={LayoutDashboard} />

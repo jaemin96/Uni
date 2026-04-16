@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LayoutDashboard, LogIn, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, LogIn, ChevronLeft, ChevronRight, Component } from "lucide-react";
 import { NavSection } from "./nav-section";
 import { NavItem } from "./nav-item";
 
@@ -29,6 +29,9 @@ export function SideNav() {
       <div className="flex flex-col gap-6">
         <NavSection title="인증" collapsed={collapsed}>
           <NavItem href="/login" label="로그인" icon={LogIn} collapsed={collapsed} />
+        </NavSection>
+        <NavSection title="Hooks" collapsed={collapsed}>
+          <NavItem href="/hooks/useRef" label="useRef" icon={Component} collapsed={collapsed} />
         </NavSection>
         <NavSection title="메인" collapsed={collapsed}>
           <NavItem

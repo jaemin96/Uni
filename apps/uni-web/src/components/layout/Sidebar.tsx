@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, LayoutDashboard, LogIn } from "lucide-react";
+import { ChevronLeft, ChevronRight, Component, LayoutDashboard, LogIn } from "lucide-react";
 import { NavSection } from "@/components/features/nav/nav-section";
 import { NavItem } from "@/components/features/nav/nav-item";
 
@@ -19,7 +19,7 @@ export function Sidebar() {
         border-r bg-background py-6
         overflow-y-auto overflow-x-hidden
         shrink-0 transition-[width] duration-200 ease-in-out
-        ${collapsed ? "w-16" : "w-[17.5rem]"}
+        ${collapsed ? "w-16" : "w-70"}
       `}
     >
       <div className={`flex items-center px-3 ${collapsed ? "justify-center" : "justify-between"}`}>
@@ -42,6 +42,9 @@ export function Sidebar() {
       <nav className="flex flex-col gap-2">
         <NavSection title="인증" collapsed={collapsed}>
           <NavItem href="/login" label="로그인" icon={LogIn} collapsed={collapsed} />
+        </NavSection>
+        <NavSection title="Hooks" collapsed={collapsed}>
+          <NavItem href="/hooks/useRef" label="useRef" icon={Component} collapsed={collapsed} />
         </NavSection>
         <NavSection title="메인" collapsed={collapsed}>
           <NavItem
