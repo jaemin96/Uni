@@ -19,9 +19,7 @@ export function AppLayout({ children }: LayoutProps) {
         <MobileNav />
 
         {/* 컨텐츠: 모바일은 헤더 아래 스크롤, 데스크톱은 사이드바 옆 스크롤 */}
-        <main className="flex-1 overflow-y-auto p-6">
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </div>
     </div>
   );

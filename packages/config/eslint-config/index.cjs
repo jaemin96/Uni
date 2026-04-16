@@ -17,14 +17,14 @@ module.exports = [
       ecmaVersion: "latest",
       sourceType: "module",
       parserOptions: {
-        ecmaFeatures: { jsx: true }
-      }
+        ecmaFeatures: { jsx: true },
+      },
     },
 
     plugins: {
       "@typescript-eslint": tseslint,
       react: reactPlugin,
-      prettier: prettierPlugin
+      prettier: prettierPlugin,
     },
 
     rules: {
@@ -33,11 +33,11 @@ module.exports = [
       "prettier/prettier": ["error", prettierConfig],
       "react/react-in-jsx-scope": "off",
       "@typescript-eslint/no-unused-vars": "warn",
-      "@typescript-eslint/ban-ts-comment": "off"
+      "@typescript-eslint/ban-ts-comment": "off",
     },
 
     settings: {
-      react: { version: "detect" }
-    }
-  }
+      react: { version: "detect" },
+    },
+  },
 ];

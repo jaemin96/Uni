@@ -44,7 +44,12 @@ export function Sidebar() {
           <NavItem href="/login" label="로그인" icon={LogIn} collapsed={collapsed} />
         </NavSection>
         <NavSection title="메인" collapsed={collapsed}>
-          <NavItem href="/dashboard" label="대시보드" icon={LayoutDashboard} collapsed={collapsed} />
+          <NavItem
+            href="/dashboard"
+            label="대시보드"
+            icon={LayoutDashboard}
+            collapsed={collapsed}
+          />
         </NavSection>
       </nav>
     </aside>

@@ -38,7 +38,7 @@ const SheetContent = React.forwardRef<
         "fixed z-50 flex flex-col bg-background shadow-lg",
         "inset-y-0 w-72",
         side === "left" ? "left-0" : "right-0",
-        className
+        className,
       )}
       {...props}
     >
@@ -56,11 +56,7 @@ const SheetTitle = React.forwardRef<
   React.ComponentRef<typeof DialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Title
-    ref={ref}
-    className={cn("text-lg font-semibold", className)}
-    {...props}
-  />
+  <DialogPrimitive.Title ref={ref} className={cn("text-lg font-semibold", className)} {...props} />
 ));
 SheetTitle.displayName = DialogPrimitive.Title.displayName;
 
