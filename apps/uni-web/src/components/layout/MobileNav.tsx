@@ -5,6 +5,7 @@ import { Menu, LayoutDashboard, LogIn, Component } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NavSection } from "@/components/features/nav/nav-section";
 import { NavItem } from "@/components/features/nav/nav-item";
+import { NAV_CONFIGS } from "../features/nav/nav-config";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -26,15 +27,13 @@ export function MobileNav() {
             <SheetTitle className="px-0">Uni</SheetTitle>
 
             <nav className="flex flex-col gap-6" onClick={() => setOpen(false)}>
-              <NavSection title="인증">
-                <NavItem href="/login" label="로그인" icon={LogIn} />
-              </NavSection>
-              <NavSection title="Hooks">
-                <NavItem href="/hooks/useRef" label="useRef" icon={Component} />
-              </NavSection>
-              <NavSection title="메인">
-                <NavItem href="/dashboard" label="대시보드" icon={LayoutDashboard} />
-              </NavSection>
+              {NAV_CONFIGS?.map((config) => (
+                <NavSection key={config?.section} title={config?.section}>
+                  {config?.items?.map((item) => (
+                    <NavItem key={item.href} href={item.href} label={item.label} icon={item.icon} />
+                  ))}
+                </NavSection>
+              ))}
             </nav>
           </div>
         </SheetContent>

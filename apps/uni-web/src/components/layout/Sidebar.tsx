@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight, Component, LayoutDashboard, LogIn } from "lucide-react";
 import { NavSection } from "@/components/features/nav/nav-section";
 import { NavItem } from "@/components/features/nav/nav-item";
+import { NAV_CONFIGS } from "../features/nav/nav-config";
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
@@ -39,21 +40,20 @@ export function Sidebar() {
         </button>
       </div>
 
-      <nav className="flex flex-col gap-2">
-        <NavSection title="인증" collapsed={collapsed}>
-          <NavItem href="/login" label="로그인" icon={LogIn} collapsed={collapsed} />
-        </NavSection>
-        <NavSection title="Hooks" collapsed={collapsed}>
-          <NavItem href="/hooks/useRef" label="useRef" icon={Component} collapsed={collapsed} />
-        </NavSection>
-        <NavSection title="메인" collapsed={collapsed}>
-          <NavItem
-            href="/dashboard"
-            label="대시보드"
-            icon={LayoutDashboard}
-            collapsed={collapsed}
-          />
-        </NavSection>
+      <nav className="flex flex-col gap-3">
+        {NAV_CONFIGS?.map((config) => (
+          <NavSection key={config?.section} title={config?.section} collapsed={collapsed}>
+            {config?.items?.map((item) => (
+              <NavItem
+                key={item.href}
+                href={item.href}
+                label={item.label}
+                icon={item.icon}
+                collapsed={collapsed}
+              />
+            ))}
+          </NavSection>
+        ))}
       </nav>
     </aside>
   );
