@@ -61,7 +61,6 @@
 
 ## 도전 과제: 어떤 훅을 어디에 배치할 것인가?
 
-
 | 구현 기능                 | 사용할 훅              | 이유                                                                                                                                                                         |
 | --------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 장바구니 추가/삭제/수량변경 로직    | useReducer         | 데이터를 핸들링 하는 로직들은 dispatch를 통하기 위해 → ✅ ADD/REMOVE/UPDATE_QTY 등 여러 액션이 하나의 `items` 상태를 공유하므로 dispatch로 흐름을 단일화하는 게 핵심. 정확함                                                   |
@@ -73,14 +72,67 @@
 
 ---
 
+## 구현 가이드
+
+### Reducer 골격
+
+```tsx
+  // cartReducer.ts
+  function cartReducer(state: CartState, action:  
+  CartAction): CartState {
+    switch (action.type) {
+      case "ADD": ...
+      case "REMOVE": ...
+      case "UPDATE_QTY": ...
+      case "CLEAR": ...
+      case "INIT": ...
+      default: return state;
+    }
+  }
+```
+
+  state를 받아서 새 state를 리턴하는 순수 함수.
+  사이드 이펙트 없음.
+
+  ---
+  어디서 붙이냐
+
+```tsx
+  // useCart.ts (커스텀 훅)
+  const [state, dispatch] =
+  useReducer(cartReducer, { items: [] });
+```
+
+  useReducer가 연결 지점. 훅 안에서 cartReducer를
+  등록하면 dispatch로 액션을 보낼 수 있게 됨.
+
+```markdown
+  cartReducer.ts     →  순수 로직만 (switch-case)
+  useCart.ts         →  useReducer로 붙이고,
+  나머지 훅들(useMemo, useCallback, useEffect,
+  useRef) 다 여기에
+  CartContainer.tsx  →  useCart() 호출해서 UI에 연결
+```
+
+  흐름 요약:
+
+```markdown
+  버튼 클릭 → dispatch({ type: "ADD", payload:item })
+            → cartReducer 실행
+            → 새 state 반환
+            → 컴포넌트 리렌더링
+```
+
 ## 구현 체크리스트
 
 ### 1. 타입 정의 (`types.ts`)
+
 - [ ] `CartItem` 타입 정의 (id, name, price, quantity)
 - [ ] `CartState` 타입 정의 (items 배열)
 - [ ] `CartAction` 유니온 타입 정의 (ADD / REMOVE / UPDATE_QTY / CLEAR / INIT)
 
 ### 2. Reducer 작성 (`cartReducer.ts`)
+
 - [ ] ADD — 이미 있는 상품이면 quantity +1, 없으면 배열에 추가
 - [ ] REMOVE — 특정 id 상품 제거
 - [ ] UPDATE_QTY — 수량 변경 (최소 1 미만 방어 로직)
@@ -88,33 +140,40 @@
 - [ ] INIT — localStorage에서 불러온 데이터로 초기화
 
 ### 3. useCart 훅 기본 뼈대 (`useCart.ts`)
+
 - [ ] `useReducer`로 상태 연결
 
 ### 4. localStorage 연동
+
 - [ ] 마운트 시 저장된 데이터 불러오기 (`useEffect` + INIT 디스패치)
 - [ ] `items` 변경 시 localStorage에 저장 (`useEffect`)
 
 ### 5. 파생 데이터 계산
+
 - [ ] `totalCount` — 전체 수량 합계 (`useMemo`)
 - [ ] `subtotal` — 가격 × 수량 합계 (`useMemo`)
 - [ ] `discount` — 10만원 이상 시 10% 할인 (`useMemo`)
 - [ ] `total` — 최종 결제 금액 (`useMemo`)
 
 ### 6. 핸들러 고정
+
 - [ ] `addItem` (`useCallback`)
 - [ ] `removeItem` (`useCallback`)
 - [ ] `updateQty` (`useCallback`)
 - [ ] `clearCart` (`useCallback`)
 
 ### 7. 이전 상태 추적
+
 - [ ] `useRef`로 이전 itemCount 보관
 - [ ] `useEffect`로 증가 감지 → 애니메이션 트리거 플래그 설정
 
 ### 8. 가상 타이머
+
 - [ ] `useRef`로 타이머 ID 보관
 - [ ] 아이템 추가 시 5분 타이머 시작
 - [ ] 기존 타이머 있으면 초기화 후 재시작
 
 ### 9. UI 연결
+
 - [ ] `useCart` 훅을 소비하는 CartContainer 컴포넌트 작성
 - [ ] CartItem 컴포넌트 작성 (`React.memo` 적용)
