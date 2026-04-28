@@ -9,5 +9,12 @@
     "./next": "./next.json",
     "./base": "./base.json"
   },
+  "typesVersions": {
+    "*": {
+      "react": ["./react.json"],
+      "next": ["./next.json"],
+      "base": ["./base.json"]
+    }
+  },
   "license": "MIT"
 }
