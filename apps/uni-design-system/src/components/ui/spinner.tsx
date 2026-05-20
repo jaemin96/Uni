@@ -1,6 +1,6 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn } from "@uni/utils";
 
 const spinnerVariants = cva(
   "animate-spin inline-block rounded-full border-2 border-t-2 border-gray-300",
@@ -21,7 +21,7 @@ const spinnerVariants = cva(
       size: "md",
       color: "gray",
     },
-  }
+  },
 );
 
 type SpinnerProps = VariantProps<typeof spinnerVariants>;

@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
+import { cn } from "@uni/utils";
 
 type PageTitleProps = {
   label: string;
@@ -12,7 +12,7 @@ export function PageTitle({ label, icon: Icon, className }: PageTitleProps) {
     <div
       className={cn(
         "flex items-center justify-center text-center w-full gap-3 text-3xl font-semibold text-foreground mb-6 mt-6",
-        className
+        className,
       )}
     >
       {Icon && <Icon className="w-6 h-6 text-muted-foreground" />}

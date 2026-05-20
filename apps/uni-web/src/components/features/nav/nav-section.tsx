@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@uni/utils
+";
 
 type NavSectionProps = {
   title: string;

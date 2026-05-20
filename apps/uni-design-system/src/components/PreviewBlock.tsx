@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@uni/utils";
 
 type PreviewBlockProps = {
   title: string;
@@ -16,10 +16,7 @@ export function PreviewBlock({ title, description, children, className }: Previe
         {description && <p className="text-xs text-muted-foreground mt-0.5">{description}</p>}
       </div>
       <div
-        className={cn(
-          "rounded-lg border bg-card p-6 flex flex-wrap items-center gap-3",
-          className
-        )}
+        className={cn("rounded-lg border bg-card p-6 flex flex-wrap items-center gap-3", className)}
       >
         {children}
       </div>

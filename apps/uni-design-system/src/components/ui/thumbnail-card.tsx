@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Image } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Card } from "./card";
+import { cn } from "@uni/utils";
 
 type ThumbnailCardProps = {
   thumbnail?: string;
@@ -14,14 +14,25 @@ type ThumbnailCardProps = {
 };
 
 const ThumbnailCard = React.forwardRef<HTMLDivElement, ThumbnailCardProps>(
-  ({ thumbnail, title, selected = false, onClick, enableScroll = true, showNoImageIcon = false, className }, ref) => {
+  (
+    {
+      thumbnail,
+      title,
+      selected = false,
+      onClick,
+      enableScroll = true,
+      showNoImageIcon = false,
+      className,
+    },
+    ref,
+  ) => {
     return (
       <Card
         ref={ref}
         className={cn(
           "group flex flex-col items-center cursor-pointer w-[calc(33.333%-0.5rem)] m-1 text-center min-h-fit p-0 gap-0 shadow-none rounded-none",
           selected && "border-primary border-2",
-          className
+          className,
         )}
         onClick={onClick}
       >
@@ -46,14 +57,14 @@ const ThumbnailCard = React.forwardRef<HTMLDivElement, ThumbnailCardProps>(
               "[&::-webkit-scrollbar-thumb]:bg-transparent",
               "[&::-webkit-scrollbar-thumb]:rounded-sm",
               "group-hover:[&::-webkit-scrollbar-thumb]:bg-black/20",
-            ]
+            ],
           )}
         >
           {title}
         </div>
       </Card>
     );
-  }
+  },
 );
 ThumbnailCard.displayName = "ThumbnailCard";
 
