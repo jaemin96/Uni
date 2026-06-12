@@ -1,3 +1,6 @@
+# biome으로 처리하는 앱 — prettier 제외
+apps/uni-board
+
 node_modules
 dist
 .next
