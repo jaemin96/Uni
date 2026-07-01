@@ -22,7 +22,7 @@ export async function deleteItems(
     const item = items[i];
     onProgress?.({ current: item.path, done: i, total: items.length });
     try {
-      await item.parentHandle.removeEntry(item.name, { recursive: true });
+      await item.parentHandle.removeEntry(item.name, { recursive: item.kind === "directory" });
       results.push({ path: item.path, success: true });
     } catch (err) {
       results.push({
