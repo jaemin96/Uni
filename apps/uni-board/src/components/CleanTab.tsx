@@ -1,9 +1,9 @@
 import { Apple, Download, FolderOpen, HardDrive, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { type CleanResult, type DeleteProgress, deleteItems } from "../lib/clean";
+import { cn } from "../lib/cn";
 import { downloadLog, writeLog } from "../lib/log";
 import { type ScannedItem, checkApiSupport, scanDirectory, scanMacJunk } from "../lib/scan";
-import { cn } from "../lib/cn";
 import { AlertDialog } from "./ui/AlertDialog";
 import { Button } from "./ui/Button";
 import { Checkbox } from "./ui/Checkbox";
@@ -159,7 +159,11 @@ export function CleanTab() {
   const groups = groupByProject(scanned);
   const allChecked = selected.size === scanned.length && scanned.length > 0;
   const someChecked = selected.size > 0 && selected.size < scanned.length;
-  const currentTab = innerTabs.find((t) => t.id === innerTab)!;
+  const currentTab = innerTabs.find((t) => t.id === innerTab);
+
+  if (!currentTab) {
+    throw new Error("Invalid tab");
+  }
 
   return (
     <div className="flex flex-col flex-1 p-8 gap-6 max-w-2xl">
